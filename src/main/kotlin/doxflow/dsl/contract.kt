@@ -4,6 +4,7 @@ import common.Element
 import doxflow.models.ability.BusinessAbilityCreator
 import doxflow.models.diagram.*
 import doxflow.models.diagram.Relationship.Companion.DEFAULT
+import doxflow.models.diagram.Relationship.Companion.ONE_TO_N
 
 class contract(element: Element) :
     Evidence<contract>(element, contract::class) {
@@ -48,6 +49,12 @@ class contract(element: Element) :
 
     override fun invoke(function: contract.() -> Unit): contract {
         return apply { function() }
+    }
+
+    override fun getUriPrefix(): String {
+        resource.let {
+            return BusinessAbilityCreator.getUri(resource, ONE_TO_N, "")
+        }
     }
 
     override fun toString(): String {

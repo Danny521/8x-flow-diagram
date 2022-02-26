@@ -15,13 +15,17 @@ diagram_intra_process {
         val repo = component("Repository")
         repo.call("DBDataSource", "方法调用")
         repo.call("RemoteDataSource", "方法调用")
-
+        // DBDataSource组件会调用系统的DB来读写数据
         component("DBDataSource").call("SqliteDB", "读写")
+        // RemoteDataSource组件会调用进程外的BFF来获取数据
         component("RemoteDataSource").call("MobileBFF", "Http请求")
     }
 
+    // 进程外的push服务会调用进程内的service来推送消息
     process("PushService").call("Service", "消息推送")
+    // 进程外的BFF服务
     process("MobileBFF")
+    // 进程外的系统数据库
     process("SqliteDB")
 
 } export "./diagrams/intra_process_diagram.png"

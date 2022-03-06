@@ -20,12 +20,6 @@ internal class siwo_docs_contract_content_test {
                     confirm_failure(twPlatform, fulfillment("取消充值订单", "取消充值订单凭证"))
                 }
 
-                fulfillment("退款", "退款凭证", "3个工作日") {
-                    request(realtor)
-                    confirm(twPlatform)
-                    confirm_failure(realtor, prosecute())
-                }
-
                 fulfillment("余额提现", "余额提现凭证", "3个工作日") {
                     request(realtor)
                     confirm(twPlatform)
@@ -54,8 +48,8 @@ internal class siwo_docs_contract_content_test {
             // 定义合约
             contract("信息推广合约") {
                 // 定义合约的签订方
-                val realtor = person("甲方", "房产经纪人")
-                val twPlatform = person("乙方", "思沃租房")
+                val realtor = person("甲方", "广告主")
+                val twPlatform = person("乙方", "广告商")
 
 
                 fulfillment("支付", "支付凭证", "20分钟") {

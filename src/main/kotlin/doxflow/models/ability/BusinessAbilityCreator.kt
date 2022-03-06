@@ -56,9 +56,9 @@ class BusinessAbilityCreator(private val serviceName: String) {
             }
             else -> singularUri = "$uriPrefix/$resource"
         }
-        table.addRow(BusinessAbilityTable.Row("GET", singularUri, "查看${displayName}", serviceName, roleName))
-        table.addRow(BusinessAbilityTable.Row("PUT", singularUri, "更改${displayName}", serviceName, roleName))
-        table.addRow(BusinessAbilityTable.Row("DELETE", singularUri, "取消${displayName}", serviceName, roleName))
+        table.addRow(BusinessAbilityTable.Row("GET", singularUri, "查看${displayName}详情", serviceName, roleName))
+//        table.addRow(BusinessAbilityTable.Row("PUT", singularUri, "更改${displayName}", serviceName, roleName))
+//        table.addRow(BusinessAbilityTable.Row("DELETE", singularUri, "取消${displayName}", serviceName, roleName))
     }
 
     fun create(): String = table.toString()

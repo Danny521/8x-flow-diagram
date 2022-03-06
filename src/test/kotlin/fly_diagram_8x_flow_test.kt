@@ -5,23 +5,23 @@ import doxflow.models.diagram.Relationship.Companion.ONE_TO_N
 import doxflow.models.diagram.Relationship.Companion.ONE_TO_ONE
 import org.junit.Test
 
-internal class siwo_diagram_8x_flow_test {
+internal class fly_diagram_8x_flow_test {
     @Test
     fun siwo_rental_diagram() {
         diagram_8x_flow {
             lateinit var thirdPayContext: fulfillment
             context("预充值服务上下文") {
-                val realtor = participant_party("房产经纪人") play role_party("广告主")
-                val platform = participant_party("思沃租赁平台") play role_party("广告商")
+                val agent = participant_party("代理商") play role_party("预充值用户")
+                val flight = participant_party("飞得高") play role_party("航空公司")
                 val thirdPay = participant_party("xxx支付") play role_party("第三方支付")
 
-                contract("预充值服务协议", realtor, platform) {
+                contract("预充值服务协议", agent, flight) {
                     resource = "order"
                     key_timestamps("签订时间")
                     participant_thing("房屋租赁信息").relate(this)
 
                     thirdPayContext = fulfillment("第三方支付"){
-                        request(realtor){
+                        request(agent){
                             key_timestamps("创建时间", "过期时间")
                             key_data("金额")
                         }
@@ -33,11 +33,11 @@ internal class siwo_diagram_8x_flow_test {
                     fulfillment("预充值") {
                         resource = "precharge-requests"
                         relationship = ONE_TO_N
-                        request(platform) {
+                        request(flight) {
                             key_timestamps("创建时间", "过期时间")
                             key_data("金额")
                         }
-                        confirmation(realtor) {
+                        confirmation(agent) {
                             key_timestamps("创建时间", "过期时间")
                             key_data("金额")
 
@@ -48,34 +48,34 @@ internal class siwo_diagram_8x_flow_test {
                             evidence play thirdPayContext.confirmation
                         }
                     }
-                    fulfillment("余额提现") {
+                    fulfillment("余额退款") {
                         resource = "refund-requests"
-                        request(realtor) {
+                        request(agent) {
                             key_timestamps("创建时间", "过期时间")
                             key_data("金额")
                         }
-                        confirmation(platform) {
+                        confirmation(flight) {
                             key_timestamps("创建时间", "过期时间")
                             key_data("金额")
 
-                            val evidence = evidence("余额提现凭证") {
+                            val evidence = evidence("余额退款凭证") {
                                 key_timestamps("支付时间")
                                 key_data("金额")
                             }
                             evidence play thirdPayContext.confirmation
                         }
                     }
-                    fulfillment("推广费用支付") {
+                    fulfillment("购票费用支付") {
                         resource = "pay-requests"
-                        request(platform) {
+                        request(flight) {
                             key_timestamps("创建时间", "过期时间")
                             key_data("金额")
                         }
-                        confirmation(realtor) {
+                        confirmation(agent) {
                             key_timestamps("创建时间", "过期时间")
                             key_data("金额")
 
-                            val evidence = evidence("推广费用支付凭证", ONE_TO_ONE) {
+                            val evidence = evidence("购票费用支付凭证", ONE_TO_ONE) {
                                 key_timestamps("支付时间")
                                 key_data("金额")
                             }
@@ -84,11 +84,11 @@ internal class siwo_diagram_8x_flow_test {
                     }
                     fulfillment("发票开具") {
                         resource = "invoice-requests"
-                        request(realtor) {
+                        request(agent) {
                             key_timestamps("创建时间", "过期时间")
                             key_data("金额")
                         }
-                        confirmation(platform) {
+                        confirmation(flight) {
                             key_timestamps("创建时间", "过期时间")
                             key_data("金额")
 
@@ -98,13 +98,13 @@ internal class siwo_diagram_8x_flow_test {
                             }
                         }
                     }
-                    fulfillment("账单开具") {
+                    fulfillment("发送消费明细") {
                         resource = "bill-requests"
-                        request(realtor) {
+                        request(agent) {
                             key_timestamps("创建时间", "过期时间")
                             key_data("金额")
                         }
-                        confirmation(platform) {
+                        confirmation(flight) {
                             key_timestamps("创建时间", "过期时间")
                             key_data("金额")
 
@@ -122,11 +122,10 @@ internal class siwo_diagram_8x_flow_test {
             }
 
             context("信息推广服务上下文") {
-                val realtor = participant_party("房产经纪人") play role_party("广告主")
-                val platform = participant_party("思沃租赁平台") play role_party("广告商")
-                val thirdPay = participant_party("xxx支付") play role_party("第三方支付")
+                val agent = participant_party("房产经纪人") play role_party("广告主")
+                val flight = participant_party("思沃租赁平台") play role_party("广告商")
 
-                contract("信息推广服务协议", realtor, platform) {
+                contract("信息推广服务协议", agent, flight) {
                     resource = "promotion"
                     relationship = ONE_TO_N
                     key_timestamps("签订时间")
@@ -135,11 +134,11 @@ internal class siwo_diagram_8x_flow_test {
                     fulfillment("推广服务") {
                         resource = "start-request"
                         relationship = ONE_TO_N
-                        request(platform) {
+                        request(flight) {
                             key_timestamps("创建时间", "过期时间")
                             key_data("房屋信息ID")
                         }
-                        confirmation(realtor) {
+                        confirmation(agent) {
                             key_timestamps("创建时间", "过期时间")
                             key_data("房屋信息ID")
                         }
@@ -147,11 +146,11 @@ internal class siwo_diagram_8x_flow_test {
                     fulfillment("暂停推广服务") {
                         resource = "suspend-request"
                         relationship = ONE_TO_N
-                        request(realtor) {
+                        request(agent) {
                             key_timestamps("创建时间", "过期时间")
                             key_data("房屋信息ID")
                         }
-                        confirmation(platform) {
+                        confirmation(flight) {
                             key_timestamps("创建时间", "过期时间")
                             key_data("房屋信息ID")
                         }
@@ -159,11 +158,11 @@ internal class siwo_diagram_8x_flow_test {
                     fulfillment("重启推广服务") {
                         resource = "restart-request"
                         relationship = ONE_TO_N
-                        request(platform) {
+                        request(flight) {
                             key_timestamps("创建时间", "过期时间")
                             key_data("房屋信息ID")
                         }
-                        confirmation(realtor) {
+                        confirmation(agent) {
                             key_timestamps("创建时间", "过期时间")
                             key_data("房屋信息ID")
                         }
@@ -171,11 +170,11 @@ internal class siwo_diagram_8x_flow_test {
                     fulfillment("查看推广数据") {
                         resource = "statistic"
                         relationship = ONE_TO_N
-                        request(realtor) {
+                        request(agent) {
                             key_timestamps("创建时间", "过期时间")
                             key_data("房屋信息ID")
                         }
-                        confirmation(platform) {
+                        confirmation(flight) {
                             key_timestamps("创建时间", "过期时间")
                             key_data("房屋信息ID")
                         }
@@ -183,11 +182,11 @@ internal class siwo_diagram_8x_flow_test {
                     fulfillment("支付") {
                         resource = "payment"
                         relationship = ONE_TO_N
-                        request(realtor) {
+                        request(agent) {
                             key_timestamps("创建时间", "过期时间")
                             key_data("金额")
                         }
-                        confirmation(platform) {
+                        confirmation(flight) {
                             key_timestamps("创建时间", "过期时间")
                             key_data("金额")
                         }
@@ -198,13 +197,13 @@ internal class siwo_diagram_8x_flow_test {
     }
 
     @Test
-    fun siwo_rental_api_doc() {
+    fun flight_api_doc() {
         diagram_8x_flow {
             context("预充值服务上下文") {
-                val realtor = participant_party("房产经纪人") play role_party("预充值用户")
-                val platform = role_party("思沃租赁")
+                val agent = participant_party("代理商") play role_party("预充值用户")
+                val flight = role_party("飞得高")
 
-                contract("预充值服务协议", realtor, platform) {
+                contract("预充值账号", agent, flight) {
                     resource = "account"
                     relationship = ONE_TO_N
                     key_timestamps("签订时间")
@@ -213,35 +212,47 @@ internal class siwo_diagram_8x_flow_test {
                     fulfillment("预充值") {
                         resource = "precharge-request"
                         relationship = ONE_TO_N
-                        request(platform) {
+                        request(flight) {
                             key_timestamps("创建时间", "过期时间")
                             key_data("金额")
                         }
-                        confirmation(realtor) {
+                        confirmation(agent) {
                             key_timestamps("创建时间", "过期时间")
                             key_data("金额")
                         }
                     }
-                    fulfillment("余额提现") {
-                        resource = "refund"
+                    fulfillment("余额退款") {
+                        resource = "balance-refundment"
                         relationship = ONE_TO_N
-                        request(realtor) {
+                        request(agent) {
                             key_timestamps("创建时间", "过期时间")
                             key_data("金额")
                         }
-                        confirmation(platform) {
+                        confirmation(flight) {
                             key_timestamps("创建时间", "过期时间")
                             key_data("金额")
                         }
                     }
-                    fulfillment("推广费用支付") {
+                    fulfillment("退票退款") {
+                        resource = "ticket-refundment"
+                        relationship = ONE_TO_N
+                        request(agent) {
+                            key_timestamps("创建时间", "过期时间")
+                            key_data("金额")
+                        }
+                        confirmation(flight) {
+                            key_timestamps("创建时间", "过期时间")
+                            key_data("金额")
+                        }
+                    }
+                    fulfillment("购票费用支付") {
                         resource = "payment"
                         relationship = ONE_TO_N
-                        request(platform) {
+                        request(flight) {
                             key_timestamps("创建时间", "过期时间")
                             key_data("金额")
                         }
-                        confirmation(realtor) {
+                        confirmation(agent) {
                             key_timestamps("创建时间", "过期时间")
                             key_data("金额")
                         }
@@ -249,23 +260,23 @@ internal class siwo_diagram_8x_flow_test {
                     fulfillment("发票开具") {
                         resource = "invoice"
                         relationship = ONE_TO_N
-                        request(realtor) {
+                        request(agent) {
                             key_timestamps("创建时间", "过期时间")
                             key_data("金额")
                         }
-                        confirmation(platform) {
+                        confirmation(flight) {
                             key_timestamps("创建时间", "过期时间")
                             key_data("金额")
                         }
                     }
-                    fulfillment("账单开具") {
+                    fulfillment("发送消费明细") {
                         resource = "bill"
                         relationship = ONE_TO_N
-                        request(realtor) {
+                        request(agent) {
                             key_timestamps("创建时间", "过期时间")
                             key_data("金额")
                         }
-                        confirmation(platform) {
+                        confirmation(flight) {
                             key_timestamps("创建时间", "过期时间")
                             key_data("金额")
                         }
@@ -273,79 +284,81 @@ internal class siwo_diagram_8x_flow_test {
                 }
             }
 
-            context("信息推广服务上下文") {
-                val realtor = participant_party("房产经纪人") play role_party("广告主")
-                val platform = participant_party("思沃租赁平台") play role_party("推广商")
+            context("机票订单上下文") {
+                val buyer = participant_party("系统用户") play role_party("购票人")
+                val saler = participant_party("飞得高") play role_party("售票商")
 
-                contract("信息推广服务协议", realtor, platform) {
-                    resource = "promotion"
+                contract("机票订单上下文", buyer, saler) {
+                    resource = "order"
                     relationship = ONE_TO_N
-                    key_timestamps("签订时间")
-                    participant_thing("房屋租赁信息").relate(this)
 
-                    fulfillment("推广服务") {
-                        resource = "start-request"
-                        relationship = ONE_TO_N
-                        request(platform) {
-                            key_timestamps("创建时间", "过期时间")
-                            key_data("房屋信息ID")
+                    fulfillment("出票") {
+                        resource = "ticket"
+                        relationship = ONE_TO_ONE
+                        request(buyer) {
                         }
-                        confirmation(realtor) {
-                            key_timestamps("创建时间", "过期时间")
-                            key_data("房屋信息ID")
+                        confirmation(saler) {
                         }
                     }
-                    fulfillment("暂停推广服务") {
-                        resource = "suspend-request"
-                        relationship = ONE_TO_N
-                        request(realtor) {
-                            key_timestamps("创建时间", "过期时间")
-                            key_data("房屋信息ID")
+                    fulfillment("行李托运重量购买") {
+                        resource = "baggage-weight"
+                        relationship = ONE_TO_ONE
+                        request(buyer) {
                         }
-                        confirmation(platform) {
-                            key_timestamps("创建时间", "过期时间")
-                            key_data("房屋信息ID")
+                        confirmation(saler) {
                         }
                     }
-                    fulfillment("重启推广服务") {
-                        resource = "restart-request"
-                        relationship = ONE_TO_N
-                        request(platform) {
-                            key_timestamps("创建时间", "过期时间")
-                            key_data("房屋信息ID")
+                    fulfillment("退票退款") {
+                        resource = "refundment"
+                        relationship = ONE_TO_ONE
+                        request(buyer) {
                         }
-                        confirmation(realtor) {
-                            key_timestamps("创建时间", "过期时间")
-                            key_data("房屋信息ID")
+                        confirmation(saler) {
                         }
                     }
-                    fulfillment("查看推广数据") {
-                        resource = "statistic"
-                        relationship = ONE_TO_N
-                        request(realtor) {
-                            key_timestamps("创建时间", "过期时间")
-                            key_data("房屋信息ID")
+                    fulfillment("购买保险") {
+                        resource = "insurance"
+                        relationship = ONE_TO_ONE
+                        request(buyer) {
                         }
-                        confirmation(platform) {
-                            key_timestamps("创建时间", "过期时间")
-                            key_data("房屋信息ID")
+                        confirmation(saler) {
                         }
                     }
-                    fulfillment("支付") {
+                    fulfillment("值机") {
+                        resource = "check-in"
+                        relationship = ONE_TO_ONE
+                        request(buyer) {
+                        }
+                        confirmation(saler) {
+                        }
+                    }
+                    fulfillment("开具发票") {
+                        resource = "invoice"
+                        relationship = ONE_TO_ONE
+                        request(buyer) {
+                        }
+                        confirmation(saler) {
+                        }
+                    }
+                    fulfillment("改签") {
+                        resource = "changing"
+                        relationship = ONE_TO_ONE
+                        request(buyer) {
+                        }
+                        confirmation(saler) {
+                        }
+                    }
+                    fulfillment("订单支付") {
                         resource = "payment"
-                        relationship = ONE_TO_N
-                        request(realtor) {
-                            key_timestamps("创建时间", "过期时间")
-                            key_data("金额")
+                        relationship = ONE_TO_ONE
+                        request(saler) {
                         }
-                        confirmation(platform) {
-                            key_timestamps("创建时间", "过期时间")
-                            key_data("金额")
+                        confirmation(buyer) {
                         }
                     }
                 }
             }
-        } export_doc "./siwo/siwo_rental_api_doc.md"
+        } export_doc "./flyHigher/flight_api_doc.md"
 
     }
 

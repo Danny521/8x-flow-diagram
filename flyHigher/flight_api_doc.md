@@ -21,7 +21,7 @@
 | 飞得高 | POST | /accounts/{aid}/payments | 请求支付购票费用 | 预充值服务服务 |
 | 预充值用户/飞得高 | GET | /accounts/{aid}/payments | 获取购票费用支付列表 | 预充值服务服务 |
 | 预充值用户/飞得高 | GET | /accounts/{aid}/payments/{pid} | 查看购票费用支付详情 | 预充值服务服务 |
-| 预充值用户/飞得高 | POST | /accounts/{aid}/payments/{pid}/confirmation | 确认支付购票费用 | 预充值服务服务 |
+| 预充值用户/三方支付系统 | POST | /accounts/{aid}/payments/{pid}/confirmation | 确认支付购票费用 | 预充值服务服务 |
 | 预充值用户/飞得高 | POST | /accounts/{aid}/invoices | 申请发票开具 | 预充值服务服务 |
 | 预充值用户/飞得高 | GET | /accounts/{aid}/invoices | 获取发票开具列表 | 预充值服务服务 |
 | 预充值用户/飞得高 | GET | /accounts/{aid}/invoices/{iid} | 查看发票开具详情 | 预充值服务服务 |

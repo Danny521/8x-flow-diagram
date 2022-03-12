@@ -68,11 +68,11 @@
 | 售票商 | POST | /orders/{oid}/payment | 申请订单支付 | 机票订单服务 |
 | 购票人/售票商 | GET | /orders/{oid}/payment | 查看订单支付详情 | 机票订单服务 |
 | 购票人/三方支付系统 | POST | /orders/{oid}/payment/confirmation | 确认支付订单 | 机票订单服务 |
-| 购票人/售票商 | GET | /tickets | 查看机票列表 | 机票订单服务 |
-| 购票人/售票商 | GET | /tickets/{tid} | 查看机票详情 | 机票订单服务 |
-| 购票人/售票商 | POST | /tickets/{tid}/check-in | 申请值机 | 机票订单服务 |
+| 乘机人/售票商 | GET | /tickets | 查看机票列表 | 机票订单服务 |
+| 乘机人/售票商 | GET | /tickets/{tid} | 查看机票详情 | 机票订单服务 |
+| 乘机人/售票商 | POST | /tickets/{tid}/check-in | 申请值机 | 机票订单服务 |
 | 售票商 | POST | /tickets/{tid}/check-in/confirmation | 确认值机 | 机票订单服务 |
-| 购票人/售票商 | POST | /tickets/{tid}/baggage-weight | 申请购买行李托运重量 | 机票订单服务 |
+| 乘机人/售票商 | POST | /tickets/{tid}/baggage-weight | 申请购买行李托运重量 | 机票订单服务 |
 | 售票商 | POST | /tickets/{tid}/baggage-weight/confirmation | 确认购买行李托运重量 | 机票订单服务 |
 
 
